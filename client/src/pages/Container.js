@@ -7,23 +7,25 @@ export default function Container() {
   const [y, setY] = useState([]);
   const [z, setZ] = useState([]);
   const [c, setC] = useState([]);
+  const [pointValue, setPointValue] = useState(3142);
+  const [updateSpeed, setUpdateSpeed] = useState(1);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setPointCount(prevPointCount => {
-        const newPointCount = prevPointCount + 1;
+        const newPointCount = prevPointCount + updateSpeed;
         return newPointCount <= 6000 ? newPointCount : 1;
       });
-    }, 1000);
+    }, 1000 / updateSpeed);
 
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [updateSpeed]);
 
   useEffect(() => {
     generateValues();
-  }, [pointCount]);
+  }, [pointCount, pointValue]);
 
   const generateValues = () => {
     const newX = [];
@@ -32,9 +34,9 @@ export default function Container() {
     const newC = [];
 
     for (let i = 0; i < pointCount; i++) {
-      const r = i * (pointCount - i);
-      newX.push(r * Math.cos(i / 30));
-      newY.push(r * Math.sin(i / 30));
+      const r = i + (pointCount - i);
+      newX.push(r * Math.cos(i + (pointValue / 100)));
+      newY.push(r * Math.cos(i % (pointValue / 100)));
       newZ.push(i);
       newC.push(i);
     }
@@ -45,19 +47,44 @@ export default function Container() {
     setC(newC);
   };
 
-  const handleSliderChange = (event) => {
-    setPointCount(Number(event.target.value));
+  const handlePointValueChange = (event) => {
+    const value = Number(event.target.value);
+    setPointValue(value);
+    setPointCount(value);
+  };
+
+  const handleUpdateSpeedChange = (event) => {
+    const value = Number(event.target.value);
+    setUpdateSpeed(value);
   };
 
   return (
     <div>
-      <input
-        type="range"
-        min="1"
-        max="6000"
-        value={pointCount}
-        onChange={handleSliderChange}
-      />
+      <div>
+        <label htmlFor="pointValue">Point Value:</label>
+        <input
+          type="range"
+          id="pointValue"
+          min="1"
+          max="6000"
+          value={pointValue}
+          onChange={handlePointValueChange}
+        />
+        <span>{pointValue}</span>
+      </div>
+      <div>
+        <label htmlFor="updateSpeed">Update Speed:</label>
+        <input
+          type="range"
+          id="updateSpeed"
+          min="5"
+          max="100"
+          step="5"
+          value={updateSpeed}
+          onChange={handleUpdateSpeedChange}
+        />
+        <span>{(updateSpeed / 100).toFixed(2)}s</span>
+      </div>
       <Plot
         data={[
           {
@@ -66,9 +93,9 @@ export default function Container() {
             x: x,
             y: y,
             z: z,
-            opacity: 0.7,
+            opacity: .4,
             line: {
-              width: 10,
+              width: 4,
               color: c,
               colorscale: 'Viridis',
             },
