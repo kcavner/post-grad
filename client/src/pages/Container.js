@@ -9,19 +9,22 @@ export default function Container() {
   const [c, setC] = useState([]);
   const [pointValue, setPointValue] = useState(3142);
   const [updateSpeed, setUpdateSpeed] = useState(1);
+  const [paused, setPaused] = useState(false); // New state variable for pause/resume
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPointCount(prevPointCount => {
-        const newPointCount = prevPointCount + updateSpeed;
-        return newPointCount <= 6000 ? newPointCount : 1;
-      });
+      if (!paused) { // Only update if not paused
+        setPointCount(prevPointCount => {
+          const newPointCount = prevPointCount + updateSpeed;
+          return newPointCount <= 6000 ? newPointCount : 1;
+        });
+      }
     }, 1000 / updateSpeed);
 
     return () => {
       clearInterval(interval);
     };
-  }, [updateSpeed]);
+  }, [updateSpeed, paused]); // Include paused state in the dependency array
 
   useEffect(() => {
     generateValues();
@@ -35,10 +38,10 @@ export default function Container() {
 
     for (let i = 0; i < pointCount; i++) {
       const r = i + (pointCount - i);
-      newX.push(r * Math.cos(i + (pointValue / 100)));
-      newY.push(r * Math.cos(i % (pointValue / 100)));
-      newZ.push(i);
-      newC.push(i);
+      newX.push(r * Math.sin(1*i) + Math.cos(pointValue / 1000));
+      newY.push(r * Math.cos(i) + (pointValue / 1000));
+      newZ.push(r * Math.sin(3*i) +Math.cos(pointValue / 1000));
+      newC.push(Math.sin(i));
     }
 
     setX(newX);
@@ -56,6 +59,10 @@ export default function Container() {
   const handleUpdateSpeedChange = (event) => {
     const value = Number(event.target.value);
     setUpdateSpeed(value);
+  };
+
+  const handlePauseResume = () => {
+    setPaused(prevPaused => !prevPaused);
   };
 
   return (
@@ -85,7 +92,12 @@ export default function Container() {
         />
         <span>{(updateSpeed / 100).toFixed(2)}s</span>
       </div>
-      <Plot
+      <div>
+        <button onClick={handlePauseResume}>
+          {paused ? "Resume" : "Pause"}
+        </button>
+      </div>
+      <Plot  
         data={[
           {
             type: 'scatter3d',
@@ -95,13 +107,20 @@ export default function Container() {
             z: z,
             opacity: .4,
             line: {
-              width: 4,
+              width: 3,
               color: c,
-              colorscale: 'Viridis',
+              colorscale: 'Viridis'
             },
           }
         ]}
-        layout={{ width: 600, height: 600, title: "Dynamic Plot" }}
+        layout={{ 
+          width: 600,
+          height: 600,
+          title: "Dynamic Plot",
+          scene:{bgcolor:"black"},
+          paper:{bgcolor:'black'}
+        }}
+       
       />
     </div>
   );
