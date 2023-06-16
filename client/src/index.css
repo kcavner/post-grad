@@ -5,12 +5,28 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: black;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.plot{
+.App{
+  display: flex;
   background-color: black;
+  justify-content: center;
+}
+.plot{
+  display: flex;
+  background-color: black;
+  justify-content: center;
+  margin-top: 3px;
+}
+
+.updateSpeed{
+  color:aliceblue
+}
+.pointValue{
+  color: aliceblue;
 }
