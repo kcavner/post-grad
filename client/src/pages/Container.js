@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import Plot from 'react-plotly.js';
+import {LinkedList,Node} from '../utils/linkedlist'
 
 export default function Container() {
   const [pointCount, setPointCount] = useState(3142);
