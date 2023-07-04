@@ -19,7 +19,7 @@ code {
 }
 .plot{
   display: flex;
-  background-color: black;
+  background-color: rgb(255, 255, 255);
   justify-content: center;
   margin-top: 3px;
 }
