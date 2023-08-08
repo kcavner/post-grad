@@ -3,6 +3,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from '@ap
 import { setContext } from '@apollo/client/link/context';
 
 import Container from './pages/Container'
+import Radial from './utils/radial'
 
 const httpLink = createHttpLink({
   //for local deployment use 'http://localhost:3001/graphql', for live deployment use '/graphql'
@@ -27,6 +28,7 @@ function App() {
     <div className="App">
      <div>its working!</div>
      <Container/>
+     <Radial/>
     </div>
     </ApolloProvider>
   );

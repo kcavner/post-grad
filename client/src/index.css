@@ -30,3 +30,37 @@ code {
 .pointValue{
   color: aliceblue;
 }
+.radial-menu {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 0;
+  height: 0;
+  transition: width 0.3s ease, height 0.3s ease;
+  pointer-events: none;
+}
+
+.menu-item {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-color: #3498db;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.trigger-element{
+  background-color:bisque;
+  margin-top: 100px;
+  color: rgb(0, 0, 0);
+  border-radius: 3px;
+  padding: 2px;
+}
